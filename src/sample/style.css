@@ -1,0 +1,11 @@
+#table{
+    -fx-font-size: 15;
+    -fx-font-family: Tahoma;
+}
+
+#right-menu-button{
+    -fx-font-family: Tahoma;
+    -fx-font-size: 16;
+    -fx-background-color: #5a99d8;
+    -fx-text-fill: white;
+}
