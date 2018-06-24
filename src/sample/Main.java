@@ -5,7 +5,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.json.simple.JSONObject;
 import ru.java.works.*;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.List;
 
 
 public class Main extends Application {
@@ -22,20 +27,13 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
 
-        /*FileWorker.toFile(new StudentWork(Type.LABORATORY,
-                "БЖД",
-                1,
-                "Как закрыть сессию за 250р",
-                new GregorianCalendar(2018, 6, 23),
-                Status.IN_PROCESS));
-
-        FileWorker.toFile(new StudentWork(Type.COURSE_PROJECT,
-                "ООП",
-                null,
-                "Как закрыть сессию за 250р",
-                new GregorianCalendar(2018, 6, 23),
-                Status.IN_PROCESS));*/
-
-        FileWorker.fromFile();
+        try {
+            final List<StudentWork> studentWorks = FileWorker.fromFile();
+            for (StudentWork work: studentWorks){
+                System.out.println(work.getDiscipline());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

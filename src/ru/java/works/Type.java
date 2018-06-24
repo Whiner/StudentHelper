@@ -7,6 +7,6 @@ public enum Type {
     ESSEY,
     COURSE_PROJECT,
     EXAM,
-    DIPLOMA,
+    DIPLOMA
 
 }

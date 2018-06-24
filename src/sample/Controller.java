@@ -2,17 +2,12 @@ package sample;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import jdk.nashorn.internal.runtime.regexp.joni.ast.ConsAltNode;
-import ru.java.works.Status;
 import ru.java.works.StudentWork;
-import ru.java.works.Type;
 
 import java.net.URL;
-import java.util.Calendar;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {

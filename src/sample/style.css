@@ -1,6 +1,7 @@
 #table{
     -fx-font-size: 15;
     -fx-font-family: Tahoma;
+    -fx-font-style: normal;
 }
 
 #right-menu-button{

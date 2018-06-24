@@ -1,18 +1,21 @@
 package ru.java.works;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class FileWorker {
-    public static void toFile(StudentWork studentWork){
-        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("data.txt", true))){
+
+    private static String filename = "data.txt";
+
+    public static void toFile(StudentWork studentWork) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filename, true))) {
             bufferedWriter.newLine();
             bufferedWriter.write("[" + studentWork.getDiscipline() + "]\n");
             bufferedWriter.write("Тип: " + studentWork.getType() + "\n");
-            if(studentWork.getNumber() == null){
-                bufferedWriter.write("Номер: - \n");
+            if (studentWork.getNumber() == null) {
+                bufferedWriter.write("Номер: -\n");
             } else {
                 bufferedWriter.write("Номер: " + studentWork.getNumber() + "\n");
             }
@@ -24,76 +27,68 @@ public class FileWorker {
         }
     }
 
-    public static /*List<StudentWork> */ void fromFile(){
-        try(BufferedReader bufferedReader = new BufferedReader(new FileReader("data.txt"))){
-            String current_string;
-            String discipline = "\\[(.+)]";
-            String type = "Тип:\\s(.+)";
-            String number = "Номер:\\s(.+)";
-            String theme = "Тема:\\s(.+)";
-            String delivery = "Дата сдачи:\\s(.+)";
-            String status = "Статус:\\s(.+)";
+    public static List<StudentWork> fromFile() throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
+        List<StudentWork> list = new ArrayList<>();
+        String current_string;
+        String discipline = "\\[(.+)]";
+        String type = "Тип:\\s(.+)";
+        String number = "Номер:\\s(.+)";
+        String theme = "Тема:\\s(.+)";
+        String delivery = "Дата сдачи:\\s(.+)";
+        String status = "Статус:\\s(.+)";
 
-            Pattern discipline_Pattern = Pattern.compile(discipline);
-            Pattern type_Pattern = Pattern.compile(type);
-            Pattern number_Pattern = Pattern.compile(number);
-            Pattern theme_Pattern = Pattern.compile(theme);
-            Pattern delivery_Pattern = Pattern.compile(delivery);
-            Pattern status_Pattern = Pattern.compile(status);
+        String temp;
 
-            Matcher matcher;
-
-            while((current_string = bufferedReader.readLine()) != null){
-                matcher = discipline_Pattern.matcher(current_string);
-                if(matcher.find()){
-                    System.out.println(matcher.group(1));
-
-                    current_string = bufferedReader.readLine();
-                    matcher = type_Pattern.matcher(current_string);
-                    if(matcher.find()){
-                        System.out.println(matcher.group(1));
+        while ((current_string = bufferedReader.readLine()) != null) {
+            StudentWork studentWork = new StudentWork();
+            try {
+                temp = Parser.parse(current_string, discipline);
+                if (temp != null) {
+                    studentWork.setDiscipline(temp);
+                    temp = Parser.parse(bufferedReader.readLine(), type);
+                    if (temp != null) {
+                        studentWork.setType(Type.valueOf(temp));
                     } else {
                         throw new Exception("Структура файла повреждена");
                     }
 
-                    current_string = bufferedReader.readLine();
-                    matcher = number_Pattern.matcher(current_string);
-                    if(matcher.find()){
-                        System.out.println(matcher.group(1));
+                    temp = Parser.parse(bufferedReader.readLine(), number);
+                    if (temp != null) {
+                        if (!temp.equals("-")) {
+                            studentWork.setNumber(Integer.valueOf(temp));
+                        }
+                    } else {
+                        throw new Exception("Структура файла повреждена");
+                    }
+                    temp = Parser.parse(bufferedReader.readLine(), theme);
+                    if (temp != null) {
+                        studentWork.setTheme(temp);
+                    } else {
+                        throw new Exception("Структура файла повреждена");
+                    }
+                    temp = Parser.parse(bufferedReader.readLine(), delivery);
+                    if (temp != null) {
+                        GregorianCalendar gc = new GregorianCalendar();
+                        gc.fromString(temp, new SimpleDateFormat("dd MMM yyyy г"));
+                        studentWork.setDeliveryDate(gc);
+                    } else {
+                        throw new Exception("Структура файла повреждена");
+                    }
+                    temp = Parser.parse(bufferedReader.readLine(), status);
+                    if (temp != null) {
+                        studentWork.setStatus(Status.valueOf(temp));
                     } else {
                         throw new Exception("Структура файла повреждена");
                     }
 
-                    current_string = bufferedReader.readLine();
-                    matcher = theme_Pattern.matcher(current_string);
-                    if(matcher.find()){
-                        System.out.println(matcher.group(1));
-                    } else {
-                        throw new Exception("Структура файла повреждена");
-                    }
-
-                    current_string = bufferedReader.readLine();
-                    matcher = delivery_Pattern.matcher(current_string);
-                    if(matcher.find()){
-                        System.out.println(matcher.group(1));
-                    } else {
-                        throw new Exception("Структура файла повреждена");
-                    }
-
-                    current_string = bufferedReader.readLine();
-                    matcher = status_Pattern.matcher(current_string);
-                    if(matcher.find()){
-                        System.out.println(matcher.group(1));
-                    } else {
-                        throw new Exception("Структура файла повреждена");
-                    }
-
+                    list.add(studentWork);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+        return list;
     }
 }
