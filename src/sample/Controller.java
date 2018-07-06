@@ -13,6 +13,12 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
 
+    public TableColumn type;
+    public TableColumn discipline;
+    public TableColumn number;
+    public TableColumn theme;
+    public TableColumn delivery;
+    public TableColumn status;
     @FXML
     TableView<StudentWork> table;
 

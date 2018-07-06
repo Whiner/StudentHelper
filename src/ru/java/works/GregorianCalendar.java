@@ -10,6 +10,10 @@ public class GregorianCalendar extends java.util.GregorianCalendar {
         super();
     }
 
+    public GregorianCalendar(long millis){
+        super.setTime(new Date(millis));
+    }
+
     public GregorianCalendar(int year, int month, int dayOfMonth) {
         super(year, month, dayOfMonth);
     }

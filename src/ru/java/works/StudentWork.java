@@ -7,7 +7,7 @@ public class StudentWork {
     private Integer number;
     private String theme;
     private GregorianCalendar deliveryDate;
-    private Status status = Status.NOT_STARTED;
+    private Status status;
 
     public StudentWork(){}
 
